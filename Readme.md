@@ -6,6 +6,11 @@
 pip install -e git+ssh://git@gitlab.com/olasearch/qaclassifier.git#egg=qaclassifier
 ````
 
+## Todo
+1. Document all Question Types
+2. Document all Answer Types
+3. Document how to add new Q/A types
+
 ### Requirements
 
 1. Python 2.7
