@@ -36,7 +36,7 @@ class QuestionClassifier ():
     # print (listSet)
 
     if hasWWord:
-      return 'WH'
+      code = 'WH'
 
     # Yes/no questions begin with words in the modal/do/have/singleBe/presentBe lists
     if listSet.inWordList('modal', 0) or listSet.inWordList('do', 0) or listSet.inWordList('have', 0) or listSet.inWordList('singleBe', 0) or listSet.inWordList('presentBe', 0):
@@ -75,7 +75,7 @@ class QuestionClassifier ():
     return words, pos
 
   def classify (self, sentence):
-    code = ''
+    code = None
     words, pos = self.sentenceToWordsPos(sentence)
     qType = self.questionType(sentence)
     listSet = ListSet(words)
@@ -194,7 +194,7 @@ class QuestionClassifier ():
     return code
 
   def findCode (self, nounSet, listSet, words, sentence, depth = 0):
-    code = ''
+    code = None
     sequence = str(words).strip('[]')
     if depth == 5:
       return ''
@@ -234,7 +234,7 @@ class QuestionClassifier ():
         code = 'ENTY:cremat'
       elif nounSet.first('food'):
         code2 = self.findCode(nounSet.append(nounSet.pop(0)), listSet, words, sentence)
-        code = code2 if code2 != '' else 'ENTY:food'
+        code = code2 if code2 is not None else 'ENTY:food'
       elif nounSet.first('plant'):
         code = 'ENTY:plant'
       elif nounSet.first('lang'):
@@ -285,7 +285,7 @@ class QuestionClassifier ():
         nounSet.listSet = newList
         depth = depth + 1
         _code = self.findCode(nounSet, listSet, words, sentence, depth)
-        code = _code if _code != '' else 'HUM:ind'
+        code = _code if _code is not None else 'HUM:ind'
 
     elif str(['stand', 'for']).strip('[]') in sequence or str(['full', 'form']).strip('[]') in sequence:
       code = 'ABBR:exp'
