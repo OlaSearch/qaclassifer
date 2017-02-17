@@ -1,6 +1,7 @@
 from .listset import ListSet
 from pattern.en import tag, parsetree
 from pattern.search import search
+import os
 
 tags = {
   'wword': ['WDT', 'WP', 'WP$', 'WRB'],
@@ -8,6 +9,8 @@ tags = {
   'verbs': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
   'adjectives': ['JJ', 'JJR', 'JJS'],
 }
+
+directory = 'qaclassifier/data/list'
 
 def lastPos (pos):
   l = len(pos)
@@ -24,12 +27,29 @@ def lastWord (words):
     return words[l - 1]
 
 class QuestionClassifier ():
+  def __init__ (self):
+    def readLists ():
+      lists = {}
+      for root, dirs, files in os.walk(directory):
+        for file in files:
+          with open(os.path.join(directory, file)) as f:
+            content = f.readlines()
+          content = [x.strip() for x in content]
+          lists[file.lower()] = content
+      return lists
+
+    # Read the lists to cache
+    self.lists = readLists()
+
+    # Additional entities added by user
+    self.entities = []
+
   def questionType (self, sentence):
     taggedWords = tag(sentence, tokenize=True)
     words = [word.encode('utf-8').lower() for word, pos in taggedWords]
     pos = [pos.encode('utf-8') for word, pos in taggedWords]
     hasWWord = any(i in pos for i in tags['wword'])
-    listSet = ListSet(words)
+    listSet = ListSet(words, self.lists)
     code = None
     # print ('Pos tags ', pos)
     # print ('words ', words)
@@ -56,6 +76,22 @@ class QuestionClassifier ():
 
     return code
 
+  def addRule (self, type, names):
+    self.lists[type] = names
+    self.entities.append(type)
+
+  def checkUserNounSet (self, nounSet, sentence):
+    for entity in self.entities:
+      if nounSet.first(entity):
+        return self.questionType(sentence) + ':' + entity
+    return False
+
+  def getUserEntityType (self, nounSet):
+    for entity in self.entities:
+      if nounSet.first(entity):
+        return entity
+    return 'other'
+
   def isQuestion (self, sentence):
     taggedWords = tag(sentence, tokenize=True)
     lastWord = taggedWords[-1]
@@ -78,11 +114,11 @@ class QuestionClassifier ():
     code = None
     words, pos = self.sentenceToWordsPos(sentence)
     qType = self.questionType(sentence)
-    listSet = ListSet(words)
+    listSet = ListSet(words, self.lists)
     hasWWord = any(i in pos for i in tags['wword'])
     # Get all nouns
     nn = [w for idx, w in enumerate(words) if pos[idx] in tags['nouns']]
-    nounSet = ListSet(nn)
+    nounSet = ListSet(nn, self.lists)
     sequence = str(words).strip('[]')
     # print (nounSet.getList())
     # When VB, Date (current or past?)
@@ -135,7 +171,7 @@ class QuestionClassifier ():
       elif listSet.inList('speed'):
         code = 'NUM:speed'
       elif listSet.inList('num'):
-        code = 'NUM:other'
+        code = 'NUM:' + self.getUserEntityType(nounSet)
 
     # How many
     if str(['how', 'many']).strip('[]') in sequence:
@@ -159,7 +195,6 @@ class QuestionClassifier ():
     if words[0] == 'how' and (words[1] == 'can' or any(i in pos[1] for i in tags['verbs'])):
       code = 'DESC:manner'
 
-
     if words[0] == 'what' or words[0] == 'which':
       code = self.findCode(nounSet, listSet, words, sentence)
 
@@ -173,7 +208,7 @@ class QuestionClassifier ():
 
     # Where, Location - Place
     if words[0] == 'where':
-      code = 'LOC:other'
+      code = 'LOC:' + self.getUserEntityType(nounSet)
 
     # Not a leading question
     if not any(i in pos[0] for i in tags['wword']) and (listSet.inList('time') or listSet.inList('date')):
@@ -201,7 +236,7 @@ class QuestionClassifier ():
 
     if nounSet.first():
       if nounSet.first('num'):
-        code = 'NUM:other'
+        code = 'NUM:' + self.getUserEntityType(nounSet)
       elif nounSet.first('speed'):
         code = 'NUM:speed'
       elif nounSet.first('dimen'):
@@ -227,7 +262,7 @@ class QuestionClassifier ():
       elif nounSet.first('mount'):
         code = 'LOC:mount'
       elif nounSet.first('loca'):
-        code = 'LOC:other'
+        code = 'LOC:' + self.getUserEntityType(nounSet)
       elif nounSet.first('prod'):
         code = 'ENTY:product'
       elif nounSet.first('art'):
@@ -258,7 +293,7 @@ class QuestionClassifier ():
       elif nounSet.first('term'):
         code = 'ENTY:termeq'
       elif nounSet.first('other'):
-        code = 'ENTY:other'
+        code = 'ENTY:' + self.getUserEntityType(nounSet)
       elif nounSet.first('sport'):
         code = 'ENTY:sport'
       elif nounSet.first('def'):
@@ -273,6 +308,8 @@ class QuestionClassifier ():
         code = 'ABBR:exp'
       elif nounSet.inList('anim'):
         code = 'ENTY:animal'
+      elif self.checkUserNounSet(nounSet, sentence):
+        code = self.checkUserNounSet(nounSet, sentence)
 
       # Fixes "what toy company"
       if code == 'ENTY:product' and nounSet.inList('comp'):

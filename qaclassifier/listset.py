@@ -1,21 +1,7 @@
 import os
-directory = 'qaclassifier/data/list'
-
-def readLists ():
-  lists = {}
-  for root, dirs, files in os.walk(directory):
-    for file in files:
-      with open(os.path.join(directory, file)) as f:
-        content = f.readlines()
-      content = [x.strip() for x in content]
-      lists[file.lower()] = content
-  return lists
-
-# Read the lists to cache
-lists = readLists()
 
 class ListSet ():
-  def __init__ (self, words):
+  def __init__ (self, words, lists):
     self.listSet = []
     words = [w.lower() for w in words]
     for idx, word in enumerate(words):

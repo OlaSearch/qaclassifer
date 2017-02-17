@@ -17,7 +17,12 @@ clf = QuestionClassifier()
 # print (clf.classify('Give a reason for American Indians oftentimes dropping out of school'))
 # print (clf.classify('What fraction of a beaver\'s life is spent swimming ?'))
 # print (clf.classify('How many shots can a stock M16 hold ?'))
-print (clf.classify('How much was the minimum wage in 1991 ?'))
+
+clf.addRule('topic', ['topics', 'topic'])
+
+print (clf.classify('Which are the popular topics in year?'))
+print (clf.classify('Where is the popular topics from?'))
+
 # print (clf.classify('What is the average cost for four years of medical school ?'))
 # print (clf.classify('How do you find oxidation numbers ?'))
 # print (clf.classify('This\'ll work, won\'t it?'))
