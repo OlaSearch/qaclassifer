@@ -1,7 +1,8 @@
 from .listset import ListSet
-from pattern.en import tag, parsetree
+from pattern.en import tag
 from pattern.search import search
 import os
+import re
 
 tags = {
   'wword': ['WDT', 'WP', 'WP$', 'WRB'],
@@ -70,7 +71,8 @@ class QuestionClassifier ():
         code = 'TG'
 
     # Choice questions either follow a certain regex or contain the word "or"
-    if (len(search('NNP? CC(?:\s*DT\s|\s)NNP?', parsetree(sentence))) or 'or' in words):
+    ch_match = re.search(r'NNP? CC(?:\s*DT\s|\s)NNP?', ' '.join(pos))
+    if (ch_match or 'or' in words):
       if listSet.inWordList('be', 0) or listSet.inWordList('do', 0) or listSet.inWordList('have', 0) or listSet.inWordList('modal', 0) or code == 'WH' or len(pos) == 3:
         code = 'CH'
 
@@ -216,15 +218,15 @@ class QuestionClassifier ():
 
     if words[0] == 'name':
       if words[1] == 'a' or words[1] == 'something':
-        code = findCode(nounSet, listSet, words, sentence)
+        code = self.findCode(nounSet, listSet, words, sentence)
       else:
         code = 'HUM:ind'
 
     if not any(i in pos[0] for i in tags['wword']) and hasWWord and code == '':
-      code = findCode(nounSet, listSet, words, sentence)
+      code = self.findCode(nounSet, listSet, words, sentence)
 
     if qType == 'YN':
-      code = findCode(nounSet, listSet, words, sentence)
+      code = self.findCode(nounSet, listSet, words, sentence)
 
     return code
 

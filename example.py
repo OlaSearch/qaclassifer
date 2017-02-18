@@ -20,8 +20,10 @@ clf = QuestionClassifier()
 
 clf.addRule('topic', ['topics', 'topic'])
 
-print (clf.classify('Which are the popular topics in year?'))
-print (clf.classify('Where is the popular topics from?'))
+# print (clf.classify('Which are the popular topics in year?'))
+# print (clf.classify('Where is the popular topics from?'))
+print (clf.classify('Did Barclays win an award?'))
+print (clf.questionType('Did Barclays win an award?'))
 
 # print (clf.classify('What is the average cost for four years of medical school ?'))
 # print (clf.classify('How do you find oxidation numbers ?'))
