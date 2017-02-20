@@ -1,5 +1,5 @@
 from .listset import ListSet
-from pattern.en import tag
+from pattern.en import tag, parse
 from pattern.search import search
 import os
 import re
@@ -122,21 +122,28 @@ class QuestionClassifier ():
     nn = [w for idx, w in enumerate(words) if pos[idx] in tags['nouns']]
     nounSet = ListSet(nn, self.lists)
     sequence = str(words).strip('[]')
-    # print (nounSet.getList())
+
+    # print (nounSet.getList(), pos)
     # When VB, Date (current or past?)
     if words[0] == 'when':
       code = 'NUM:date'
 
     # Who: Human, Individual or Group...
     if listSet.inList('who', 0):
+      # Who killed Gandhi ?
       code = 'HUM:ind'
       # Who is Terrence Malick ?
-      if pos[1] in ['VBD', 'VBZ'] and pos[2] == 'NNP':
+      # is => VBZ
+      # killed => VBD
+      if re.search(r'.*? VBZ (NNP\s?)+$', ' '.join(pos)):
+        # Multiple proper nouns and end of sentence
+        code = 'HUM:ind'
+      elif pos[1] in ['VBZ'] and pos[2] == 'NNP':
         code = 'HUM:desc'
 
     # Why VB: Reason "Why do birds sing?"
     # `do` is tagged as JJ (advective)
-    if words[0] == 'why' and any(i in pos[1] for i in tags['adjectives']):
+    if words[0] == 'why' and any(i in pos[1] for i in tags['adjectives'] + tags['verbs']):
       code = 'DESC:reason'
 
     # Edge Reason - Give a reason...
@@ -198,7 +205,7 @@ class QuestionClassifier ():
       code = 'DESC:manner'
 
     if words[0] == 'what' or words[0] == 'which':
-      code = self.findCode(nounSet, listSet, words, sentence)
+      code = self.findCode(nounSet, listSet, words, sentence, pos)
 
       # Double check these,
       # What was the name... was slipping though
@@ -218,19 +225,19 @@ class QuestionClassifier ():
 
     if words[0] == 'name':
       if words[1] == 'a' or words[1] == 'something':
-        code = self.findCode(nounSet, listSet, words, sentence)
+        code = self.findCode(nounSet, listSet, words, sentence, pos)
       else:
         code = 'HUM:ind'
 
-    if not any(i in pos[0] for i in tags['wword']) and hasWWord and code == '':
-      code = self.findCode(nounSet, listSet, words, sentence)
+    if not any(i in pos[0] for i in tags['wword']) and hasWWord and code == None:
+      code = self.findCode(nounSet, listSet, words, sentence, pos)
 
     if qType == 'YN':
-      code = self.findCode(nounSet, listSet, words, sentence)
+      code = self.findCode(nounSet, listSet, words, sentence, pos)
 
     return code
 
-  def findCode (self, nounSet, listSet, words, sentence, depth = 0):
+  def findCode (self, nounSet, listSet, words, sentence, pos, depth = 0):
     code = None
     sequence = str(words).strip('[]')
     if depth == 5:
@@ -250,7 +257,13 @@ class QuestionClassifier ():
       elif nounSet.first('code'):
         code = 'NUM:code'
       elif nounSet.first('peop') or nounSet.first('prof'):
-        code = 'HUM:ind'
+        # Check there is NN + VB
+        # What does a person work on?
+        wh_ent_other_match = re.search(r'WP VBZ .*? NN VB', ' '.join(pos))
+        if wh_ent_other_match:
+          code = 'ENTY:' + self.getUserEntityType(nounSet)
+        else:
+          code = 'HUM:ind'
       elif nounSet.first('group') or nounSet.first('comp'):
         code = 'HUM:gr'
       elif nounSet.first('job'):
@@ -270,7 +283,11 @@ class QuestionClassifier ():
       elif nounSet.first('art'):
         code = 'ENTY:cremat'
       elif nounSet.first('food'):
-        code2 = self.findCode(nounSet.append(nounSet.pop(0)), listSet, words, sentence)
+        # If the first word is What food, then it has to be food
+        if not any(i in pos[0] for i in tags['wword']):
+          code2 = self.findCode(nounSet.pop(), listSet, words, pos, sentence)
+        else:
+          code2 = None
         code = code2 if code2 is not None else 'ENTY:food'
       elif nounSet.first('plant'):
         code = 'ENTY:plant'
@@ -294,6 +311,8 @@ class QuestionClassifier ():
         code = 'ENTY:religion'
       elif nounSet.first('term'):
         code = 'ENTY:termeq'
+      elif nounSet.first('event'):
+        code = 'ENTY:event'
       elif nounSet.first('other'):
         code = 'ENTY:' + self.getUserEntityType(nounSet)
       elif nounSet.first('sport'):
@@ -305,7 +324,10 @@ class QuestionClassifier ():
       elif nounSet.first('desc') or nounSet.first('quot'):
         code = 'DESC:desc'
       elif nounSet.first('abb'):
-        code = 'ABBR:abb'
+        if str(['stand', 'for']).strip('[]') in sequence:
+          code = 'ABBR:exp'
+        else:
+          code = 'ABBR:abb'
       elif str(['stand', 'for']).strip('[]') in sequence:
         code = 'ABBR:exp'
       elif nounSet.inList('anim'):
@@ -320,10 +342,10 @@ class QuestionClassifier ():
         newList = []
         for word, lst, pos in nounSet.listSet:
           if word != 'name':
-            newList.append(word)
+            newList.append((word, lst, pos))
         nounSet.listSet = newList
         depth = depth + 1
-        _code = self.findCode(nounSet, listSet, words, sentence, depth)
+        _code = self.findCode(nounSet, listSet, words, sentence, pos, depth)
         code = _code if _code is not None else 'HUM:ind'
 
     elif str(['stand', 'for']).strip('[]') in sequence or str(['full', 'form']).strip('[]') in sequence:

@@ -32,8 +32,17 @@ class ListSet ():
 
     return False
 
+  def pop (self):
+    del self.listSet[:1]
+    return self
+
   def getList (self):
     return self.listSet
+
+  def isNext (self, listName):
+    if listName is None:
+      return False if len(self.listSet) is 0 else True
+    return self.inList(listName, 1)
 
   def first (self, listName = None):
     if listName is None:

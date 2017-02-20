@@ -1,0 +1,11 @@
+DESC:desc What did the only repealed amendment to the U.S. Constitution deal with ?
+ENTY:other What articles of clothing are tokens in Monopoly ?
+ENTY:other Name a golf course in Myrtle Beach .
+DESC:desc What do Mormons believe ?
+ENTY:religion In what religion was Isis the nature goddess ?
+ENTY:other What was cash-conscious Colonel Edwin L. Drake the first to drill ?
+HUM:gr What ISPs exist in the Caribbean ?
+ENTY:other What weapon is the mythological character Apollo most proficient with ?
+DESC:desc Where did the term `` 86ed '' come from ?
+HUM:ind Who is Snoopy 's arch-enemy ?
+DESC:def What is the nature of learning ?

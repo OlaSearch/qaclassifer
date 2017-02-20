@@ -3,3 +3,52 @@ DESC:def What are the popular topics in 2010?
 ENTY:sport What game does Bob like to play?
 ENTY:other Did Barclays win an award?
 HUM:ind Who won gold awards in Australia in 2016 for UX?
+ENTY:sport What game does Bob like to play?
+DESC:manner How did serfdom develop in and then leave Russia ?
+ENTY:cremat What films featured the character Popeye Doyle ?
+DESC:manner How can I find a list of celebrities ' real names ?
+ENTY:animal What fowl grabs the spotlight after the Chinese Year of the Monkey ?
+ABBR:exp What is the full form of .com ?
+HUM:ind What contemptible scoundrel stole the cork from my lunch ?
+HUM:gr What team did baseball 's St. Louis Browns become ?
+HUM:title What is the oldest profession ?
+DESC:def What are liver enzymes ?
+HUM:ind Name the scar-faced bounty hunter of The Old West .
+NUM:date When was Ozzy Osbourne born ?
+DESC:reason Why do heavier objects travel downhill faster ?
+HUM:ind Who was The Pride of the Yankees ?
+HUM:ind Who killed Gandhi ?
+ENTY:event What is considered the costliest disaster the insurance industry has ever faced ?
+LOC:state What sprawling U.S. state boasts the most airports ?
+NUM:count How many Jews were executed in concentration camps during WWII ?
+DESC:def What is `` Nine Inch Nails '' ?
+DESC:def What is an annotated bibliography ?
+NUM:date What is the date of Boxing Day ?
+HUM:ind Name 11 famous martyrs .
+DESC:desc What 's the Olympic motto ?
+DESC:desc What is the origin of the name ` Scarlett ' ?
+ENTY:letter What 's the second-most-used vowel in English ?
+HUM:ind Who was the inventor of silly putty ?
+LOC:other What is the highest waterfall in the United States ?
+LOC:state Which two states enclose Chesapeake Bay ?
+ABBR:exp What does the abbreviation AIDS stand for ?
+ENTY:other What does a spermologer collect ?
+NUM:count How many points make up a perfect fivepin bowling score ?
+HUM:gr Which company that manufactures video-game hardware sells the `` super system '' ?
+NUM:count How many Community Chest cards are there in Monopoly ?
+NUM:date When did the neanderthal man live ?
+LOC:other Where do the adventures of `` The Swiss Family Robinson '' take place ?
+ENTY:animal What relative of the racoon is sometimes known as the cat-bear ?
+DESC:manner How can I register my website in Yahoo for free ?
+NUM:count How many people in the world speak French ?
+NUM:count How many inches over six feet is the Venus de Milo ?
+DESC:manner How do they find or choose witnesses to an execution ?
+HUM:ind What 1920s cowboy star rode Tony the Wonder Horse ?
+ENTY:food What cocktail inspired John Doxat to write the book Stirred-Not Shaken ?
+DESC:manner How do you ask a total stranger out on a date ?
+LOC:country What country do the Galapagos Islands belong to ?
+DESC:def What is ethology ?
+HUM:ind Who was the prophet of the Muslim people ?
+ENTY:color What 's the only color Johnny Cash wears on stage ?
+ENTY:termeq What 's the term for a young fox ?
+LOC:state What U.S. state lived under six flags ?

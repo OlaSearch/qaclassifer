@@ -11,15 +11,9 @@ class QaTests (TestCase):
         (a, q) = line.rstrip('\n').split(' ', 1)
         self.testcases.append((q, a))
 
-  def test_isquestion (self):
-    for q, a in self.testcases:
-      self.assertEqual(
-        self.clf.isQuestion(q),
-        True
-      )
-
   def test_classify (self):
     for q, a in self.testcases:
+      print (q, a)
       self.assertEqual(
         self.clf.classify(q),
         a
