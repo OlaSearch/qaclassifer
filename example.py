@@ -33,7 +33,7 @@ clf = QuestionClassifier()
 # print (clf.classify("Why do heavier objects travel downhill faster ?"))
 # print (clf.classify("Who won gold awards in Australia in 2016 for UX?"))
 # print (clf.classify("Who is Terence Malik"))
-print (clf.classify("What is the nature of learning ?"))
+print (clf.classify("What is tectonic plates?"))
 
 # print (clf.classify('What is the average cost for four years of medical school ?'))
 # print (clf.classify('How do you find oxidation numbers ?'))

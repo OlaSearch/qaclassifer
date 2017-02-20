@@ -1,5 +1,5 @@
 from .listset import ListSet
-from pattern.en import tag, parse
+from pattern.en import tag
 from pattern.search import search
 import os
 import re
