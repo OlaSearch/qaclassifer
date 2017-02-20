@@ -11,7 +11,7 @@ tags = {
   'adjectives': ['JJ', 'JJR', 'JJS'],
 }
 
-directory = 'qaclassifier/data/list'
+directory = 'data/list'
 
 def lastPos (pos):
   l = len(pos)
@@ -31,9 +31,9 @@ class QuestionClassifier ():
   def __init__ (self):
     def readLists ():
       lists = {}
-      for root, dirs, files in os.walk(directory):
+      for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), directory)):
         for file in files:
-          with open(os.path.join(directory, file)) as f:
+          with open(os.path.join(os.path.dirname(__file__), directory, file)) as f:
             content = f.readlines()
           content = [x.strip() for x in content]
           lists[file.lower()] = content

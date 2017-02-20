@@ -18,12 +18,17 @@ clf = QuestionClassifier()
 # print (clf.classify('What fraction of a beaver\'s life is spent swimming ?'))
 # print (clf.classify('How many shots can a stock M16 hold ?'))
 
-clf.addRule('topic', ['topics', 'topic'])
+# clf.addRule('topic', ['topics', 'topic'])
+# clf.addRule('company', ['barclays'])
 
 # print (clf.classify('Which are the popular topics in year?'))
 # print (clf.classify('Where is the popular topics from?'))
-print (clf.classify('Did Barclays win an award?'))
-print (clf.questionType('Did Barclays win an award?'))
+# print (clf.classify('Would you prefer Coke or iced tea?'))
+# print (clf.classify('Did Barclays win an award?'))
+
+print (clf.classify('Where are the gold award winners from?'))
+clf.addRule('topic', ['topics', 'topic'])
+print (clf.classify('What are the popular topics in 2010?'))
 
 # print (clf.classify('What is the average cost for four years of medical school ?'))
 # print (clf.classify('How do you find oxidation numbers ?'))

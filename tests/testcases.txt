@@ -1,0 +1,5 @@
+LOC:other Where are the gold award winners from?
+DESC:def What are the popular topics in 2010?
+ENTY:sport What game does Bob like to play?
+ENTY:other Did Barclays win an award?
+HUM:ind Who won gold awards in Australia in 2016 for UX?
