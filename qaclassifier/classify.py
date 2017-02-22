@@ -138,7 +138,7 @@ class QuestionClassifier ():
       if re.search(r'.*? VBZ (NNP\s?)+$', ' '.join(pos)):
         # Multiple proper nouns and end of sentence
         code = 'HUM:ind'
-      elif pos[1] in ['VBZ'] and pos[2] == 'NNP':
+      elif len(pos) > 1 and pos[1] in ['VBZ'] and pos[2] == 'NNP':
         code = 'HUM:desc'
 
     # Why VB: Reason "Why do birds sing?"
