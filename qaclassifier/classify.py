@@ -165,7 +165,7 @@ class QuestionClassifier ():
 
     # How
     if words[0] == 'how' or words[0] == 'what':
-      if words[1] == 'often' or listSet.inList('perc'):
+      if len(words) > 1 and words[1] == 'often' or listSet.inList('perc'):
         code = 'NUM:perc'
       elif listSet.inList('dimen') or listSet.inList('big'):
         code = 'NUM:volsize'
@@ -201,7 +201,7 @@ class QuestionClassifier ():
 
     # Manner
     # "How do you find oxidation numbers ?"
-    if words[0] == 'how' and (words[1] == 'can' or any(i in pos[1] for i in tags['verbs'])):
+    if words[0] == 'how' and len(words) > 1 and (words[1] == 'can' or any(i in pos[1] for i in tags['verbs'])):
       code = 'DESC:manner'
 
     if words[0] == 'what' or words[0] == 'which':
