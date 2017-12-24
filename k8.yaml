@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: spacy-service-en
+spec:
+  selector:
+    app: spacy
+    lang: en
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: spacy-en-port
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: spacy-deployment-en
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: spacy
+        tier: backend
+        lang: en
+    spec:
+      containers:
+      - name: spacy
+        image: registry.gitlab.com/olasearch/spacy_api:${BUILD_NUMBER}
+        resources:
+          limits: 
+            memory: '450M'
+          requests:
+            memory: '350M'
+        ports:
+        - name: spacy-en-port
+          containerPort: 9033

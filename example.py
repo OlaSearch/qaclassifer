@@ -34,7 +34,9 @@ clf = QuestionClassifier()
 # print (clf.classify("Who won gold awards in Australia in 2016 for UX?"))
 # print (clf.classify("Who is Terence Malik"))
 # print (clf.classify("What is tectonic plates?"))
-print (clf.classify("Who won"))
+text = 'What is the average size of the these winners?'
+print (clf.questionType(text))
+print (clf.classify(text))
 
 # print (clf.classify('What is the average cost for four years of medical school ?'))
 # print (clf.classify('How do you find oxidation numbers ?'))

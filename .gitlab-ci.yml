@@ -1,0 +1,32 @@
+variables:
+  DOCKER_DRIVER: overlay
+  IMAGE: registry.gitlab.com/olasearch/spacy_api
+  K8S_URL: "https://rancher.olasearch.com/r/projects/1a7/kubernetes:6443"
+  K8S_TOKEN: QmFzaWMgT0RNM1F6RTVNalZCT1RJelF6STVSVFF6TTBVNmRqaHFZVzV4VkZsMVpXaE1UbVpFUmpKSGVXMTRiVmxSZGxKamRsbE9ZV280ZUcxMFlsZFNaQT09
+  CI_REGISTRY: registry.gitlab.com
+
+services:
+  - docker:dind
+
+build:
+  image: docker:latest
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" $CI_REGISTRY
+    - docker build -t "$IMAGE:${CI_BUILD_REF}" .
+    - docker push "$IMAGE:${CI_BUILD_REF}"
+  only:
+    - master
+
+k8s-deploy:
+  image: lwolf/kubectl_deployer:latest
+  stage: deploy
+  script:
+    - kubectl config set-cluster Kubernetes --server="$K8S_URL" --insecure-skip-tls-verify=true
+    - kubectl config set-credentials Kubernetes --token="$K8S_TOKEN"
+    - kubectl config set-context Kubernetes --cluster=Kubernetes --user=Kubernetes
+    - kubectl config use-context Kubernetes
+    - kubectl get cs
+    - /bin/sh deploy.sh ${CI_BUILD_REF} default
+  only:
+    - master
