@@ -3,7 +3,7 @@
 ## Usage
 
 ````
-pip install -e git+ssh://git@gitlab.com/olasearch/qaclassifier.git#egg=qaclassifier
+pip install -e git+ssh://git@gitlab.com/olasearch/qaclassifier.git@1.0.0#egg=qaclassifier
 ````
 
 ## Todo
