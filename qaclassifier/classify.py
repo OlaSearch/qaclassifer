@@ -1,6 +1,5 @@
 from .listset import ListSet
 from pattern.en import tag
-from pattern.search import search
 import os
 import re
 
@@ -47,8 +46,8 @@ class QuestionClassifier ():
 
   def questionType (self, sentence):
     taggedWords = tag(sentence, tokenize=True)
-    words = [word.encode('utf-8').lower() for word, pos in taggedWords]
-    pos = [pos.encode('utf-8') for word, pos in taggedWords]
+    words = [word.lower() for word, pos in taggedWords]
+    pos = [pos for word, pos in taggedWords]
     hasWWord = any(i in pos for i in tags['wword'])
     listSet = ListSet(words, self.lists)
     code = None
@@ -108,8 +107,8 @@ class QuestionClassifier ():
 
   def sentenceToWordsPos (self, sentence):
     taggedWords = tag(sentence, tokenize=True)
-    words = [word.encode('utf-8').lower() for word, pos in taggedWords]
-    pos = [pos.encode('utf-8') for word, pos in taggedWords]
+    words = [word.lower() for word, pos in taggedWords]
+    pos = [pos for word, pos in taggedWords]
     return words, pos
 
   def classify (self, sentence):
