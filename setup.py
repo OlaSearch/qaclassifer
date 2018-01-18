@@ -1,7 +1,7 @@
 import sys
 from setuptools import setup, find_packages
 name = 'qaclassifier'
-version='1.0.2'
+version='1.0.3'
 package_dir = {name: name}
 
 if sys.version_info < (3, 3):
@@ -11,10 +11,7 @@ setup(
   version=version,
   license='MIT',
   package_dir=package_dir,
-  install_requires=[
-    'Pattern'
-  ],
   dependency_links=[
-    'git+ssh://git@github.com/clips/pattern.git@development#egg=Pattern'
+    'git+https://git@github.com/clips/pattern.git@development#egg=Pattern'
   ]
 )
