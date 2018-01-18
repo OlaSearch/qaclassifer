@@ -1,1 +1,1 @@
--e git+ssh://git@github.com/clips/pattern.git@ec95f97b2e34c2232e7c43ef1e34e3f0dea6654b#egg=Pattern
+-e git+ssh://git@github.com/clips/pattern.git@development#egg=Pattern
