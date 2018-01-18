@@ -1,7 +1,7 @@
 import sys
 from setuptools import setup, find_packages
 name = 'qaclassifier'
-version='1.0.0'
+version='1.0.1'
 package_dir = {name: name}
 
 if sys.version_info < (3, 3):
