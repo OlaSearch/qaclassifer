@@ -5,7 +5,7 @@ Simple rules based Question and answer type classification.
 ## Usage
 
 ````
-pip install -e git+ssh://git@github.com/olasearch/qaclassifier.git@1.0.2#egg=qaclassifier
+pip install -e git+ssh://git@github.com/OlaSearch/qaclassifier.git@1.0.2#egg=qaclassifier
 ````
 
 ## Todo
@@ -31,7 +31,7 @@ clf.isQuestion('Hello how are you')
 # YN => Yes/No questions
 # WH => What/When/How
 # TG => This'll work, won't it?
-# CH => Would you prefer Coke or iced tea?
+# CH => Would you prefer Coke or iced te1.a?
 clf.questionType('Would you prefer Coke or iced tea?')
 
 # Detect answer type to output
